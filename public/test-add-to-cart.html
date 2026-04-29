@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Add to Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8 bg-gray-100">
+    <div class="container mx-auto max-w-2xl">
+        <h1 class="text-3xl font-bold mb-4">Test Add to Cart</h1>
+        
+        <div class="bg-yellow-100 p-4 rounded mb-4">
+            <p class="font-bold">Make sure you are logged in first!</p>
+            <p>Login at: <a href="/store-projet/public/login" class="text-blue-600 underline">Login Page</a></p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-4">
+            <h2 class="text-xl font-bold mb-4">Test Adding Product ID 1</h2>
+            <button onclick="testAddToCart(1)" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Add Product ID 1 to Cart
+            </button>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-4">
+            <h2 class="text-xl font-bold mb-4">Test Getting Cart</h2>
+            <button onclick="testGetCart()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Get Cart Items
+            </button>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Response</h2>
+            <pre id="response" class="bg-gray-100 p-4 rounded overflow-auto max-h-96">Click a button to test...</pre>
+        </div>
+    </div>
+    
+    <script>
+        async function testAddToCart(productId) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = 'Loading...';
+            
+            try {
+                const res = await fetch('/store-projet/public/api/index.php?action=add-to-cart', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: productId, quantity: 1 })
+                });
+                
+                const data = await res.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function testGetCart() {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = 'Loading...';
+            
+            try {
+                const res = await fetch('/store-projet/public/api/index.php?action=cart');
+                const data = await res.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
